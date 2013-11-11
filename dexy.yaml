@@ -1,19 +1,19 @@
 figures:
     - src/gerrit-graph.py|py:
-      - py: { scriptargs: '../data/gerrit_data.json ../doc/gerrit_graph.pdf ../data/GerritGraph.json ../doc/gerrit_closeness.eps', add-new-files: True, output-extensions: ['.eps']}
+      - py: { scriptargs: '../data/gerrit_data.json ../doc/gerrit_graph.pdf ../data/GerritGraph.json ../doc/gerrit_closeness.tiff', add-new-files: True, output-extensions: ['.eps']}
       - data/gerrit_data.json
     - src/gerrit-patch-set-histogram.py|py:
-      - py: { scriptargs: '../data/gerrit_data.json ../doc/gerrit_patch_set_histogram.eps', add-new-files: True, output-extensions: ['.eps']}
+      - py: { scriptargs: '../data/gerrit_data.json ../doc/gerrit_patch_set_histogram.tiff', add-new-files: True, output-extensions: ['.eps']}
       - data/gerrit_data.json
     - src/gerrit-fix-ups-fig.py|py:
-      - py: { scriptargs: '../data/PreGerrit.pkl ../data/PostGerrit.pkl ../doc/gerrit_fix_ups.eps', add-new-files: True, output-extensions: ['.eps', '.json']}
+      - py: { scriptargs: '../data/PreGerrit.pkl ../data/PostGerrit.pkl ../doc/gerrit_fix_ups.tiff', add-new-files: True, output-extensions: ['.eps', '.json']}
       - data/PreGerrit.pkl
       - data/PostGerrit.pkl
     - src/ij-articles.py|py:
-      - py: { scriptargs: '../data/IJ-Cumulative-Article-2013.csv ../doc/insight_journal_submissions.eps', add-new-files: True, output-extensions: ['.eps']}
+      - py: { scriptargs: '../data/IJ-Cumulative-Article-2013.csv ../doc/insight_journal_submissions.tiff', add-new-files: True, output-extensions: ['.eps']}
       - data/IJ-Cumulative-Article-2013.csv
     - src/git-contributors-histogram.py|py:
-      - py: { scriptargs: '../data/itk_git_contributors.dat ../doc/itk_git_contributors.eps', add-new-files: True, output-extensions: ['.eps']}
+      - py: { scriptargs: '../data/itk_git_contributors.dat ../doc/itk_git_contributors.tiff', add-new-files: True, output-extensions: ['.eps']}
       - data/itk_git_contributors.dat
 
 doc/frontiers.tex|jinja|latex:
@@ -26,6 +26,7 @@ doc/frontiers.tex|jinja|latex:
     - .sty
     - .eps
     - .png
+    - .tiff
     - .json
     - _*.tex:
         - output: False
