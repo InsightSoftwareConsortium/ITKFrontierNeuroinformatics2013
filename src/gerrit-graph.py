@@ -14,7 +14,7 @@ import networkx as nx
 from networkx.readwrite import json_graph
 import prettyplotlib
 
-mpl.rcParams['text.fontsize'] = 10
+mpl.rcParams['font.size'] = 10
 
 mpl.rcParams['axes.labelsize'] = 'x-large'
 mpl.rcParams['xtick.labelsize'] = 'large'

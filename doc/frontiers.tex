@@ -76,13 +76,24 @@ source methodologies, ITK has provided the medical image community with an
 effective platform on which to build a daily workflow that incorporates the
 true scientific practices of reproducibility verification.
 
-This article describes the multiple tools, methodologies, and practices that the
-ITK community has adopted, refined and followed during the past decade, in
-order to become one of the research communities with the most modern reproducibility
-verification infrastructure. Some of the elements described here include
-software development methodologies, advanced publishing practices, and a
-cohesive community culture. An analysis of the data and statistics that have
-transpired over the past fourteen years of the project is presented.
+This article describes the multiple tools, methodologies, and practices that
+the ITK community has adopted, refined and followed during the past decade, in
+order to become one of the research communities with the most modern
+reproducibility verification infrastructure. Some of the elements described
+here include software development methodologies, advanced publishing
+practices, and a cohesive community culture. An analysis of the data and
+statistics that have transpired over the past fourteen years of the project is
+presented.
+
+For example, 207 contributors have created over 2400 unit tests that provide
+over 84\% code line test coverage. The Insight Journal, an open publication
+journal associated with the toolkit, has seen over 360,000 publication
+downloads. In the analysis of three years of activity preceeding and following
+the adoption of a peer code review system, the number of two or more fix-up
+commits were decreased by half. And, the median normalized closeness
+centrality, a measure of knowledge flow, resulting from the distributed peer
+code review system was high, << d['src/gerrit-median-centrality.py|py'] >>.
+
 \section{}
 
 \tiny
@@ -640,7 +651,8 @@ nodes sequentially \cite{Newman2005}. Overall, this measure of communication is
 rather high across the board, and individuals with a higher
 number of changes also have a higher centrality measure.  There are three
 outliers, but all other contributors are members of the primary connected
-component.
+component. The median closeness centrality of the primary connected component is
+<< d['src/gerrit-median-centrality.py|py'] >>.
 
 
 %  the following statistics were obtained with the script

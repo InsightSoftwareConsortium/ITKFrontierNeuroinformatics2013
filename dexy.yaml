@@ -33,3 +33,7 @@ doc/frontiers.tex|jinja|latex:
     - src/gerrit-results.py|py:
       - data/gerrit_data.json
       - py: { 'add-new-files': True }
+    - src/gerrit-median-centrality.py|py:
+      - data/gerrit_data.json
+      - py: { scriptargs: '../data/gerrit_data.json' } 
+      - src/gerrit-graph.py
