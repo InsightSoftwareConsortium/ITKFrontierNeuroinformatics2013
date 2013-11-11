@@ -63,7 +63,7 @@ svg.append("svg:defs").selectAll("marker")
   .append("svg:path")
     .attr("d", "M0,-5L10,0L0,5");
 
-d3.json("GerritGraph.json", function(error, graph) {
+d3.json("../output/data/GerritGraph.json", function(error, graph) {
   force
       .nodes(graph.nodes)
       .links(graph.links)
