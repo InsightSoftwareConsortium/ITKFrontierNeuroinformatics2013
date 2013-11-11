@@ -30,7 +30,6 @@
 % If one of the authors has a change of address, list the new address below the correspondence details using a superscript symbol and use the same symbol to indicate the author in the author list.
 \def\Address{$^{1}$Medical Computing Group, Kitware Inc, Clifton Park, NY, USA\\
 $^{2}$Medical Computing Group, Kitware Inc, Lyon, France\\
-$^{3}$University of Michigan, Ann Arbor, MI, USA\\
 }
 % The Corresponding Author should be marked with an asterisk
 % Provide the exact contact address (this time including street name and city zip code) and email of the corresponding author
@@ -142,12 +141,13 @@ perform such verification with minimal effort and minimal loss of information.
 
 Other journals, in particular Frontiers, PLoS, and more recently Nature, have
 embraced this restoration of the true practice of the scientific
-method~\cite{Stodden2013,NatureEditorial2013,NatureEditorial2012,Mobley2013}.  With the
+method~\cite{Stodden2013,NatureEditorial2013,NatureEditorial2012}.  With the
 support of the Reproducible Research movement, these progressive publication
 venues are creating the conditions for a new age of enlightenment in which the
 methodologies of practical research work will not be subject to secrecy. Nor
 will they be subject to the veil of suspicion caused by many incidents of scientific fraud and
-data manufacturing that have been reported in recent months~\cite{Sandve2013}.
+data manufacturing that have been reported in recent
+months~\cite{Sandve2013,Mobley2013,Begley2012}.
 
 %
 %The following numbers were computed with the script:
@@ -211,10 +211,10 @@ testing system (CDash), a version control system (Git), a code review system
 ITK has a stringent system of quality control that uses a combination of unit
 testing, regression testing, multi-platform verification, and continuous
 integration. The collection of unit tests are executed nightly by computers
-contributed by community members all around the world, and reporting to a
+contributed by community members around the world, and reporting to a
 central online dashboard that summarizes the results. This web-based dashboard
 system (CDash) \cite{ITKDashboard} ensures ITK$'$s software quality as
-developers around the world continuously make changes to the code base. Build
+developers world continuously make changes to the code base. Build
 status and regression test status are visualized in a tabular form. The
 dashboard is an important coordination and communication tool that empowers
 developers to share the results of a local test with other developers by
@@ -234,7 +234,7 @@ used to support the quest for knowledge in a reproducible research environment.
 A good source code version control system allows developers to easily keep
 track of the entire history of the software development. Researchers can
 reference the complete state of experimental source code, and a reviewer can
-reliably and easily check out that archived state for examination.  Git is an
+reliably and easily regenerate that archived state for examination.  Git is an
 open source, distributed version control system designed to perform with speed
 and efficiency. Its features include easy local branching, convenient staging
 areas, and multiple workflows, which are particularly useful for large open
@@ -246,7 +246,7 @@ from CVS to Git, the history of the development was preserved and a simple Git
 workflow was customized for ITK developers.  The adoption of Git empowered ITK
 developers to easily create flexible workflows of branching and merging. It
 also allowed developers to make commits in local repositories, and hence
-enabled them to work consistently even when not connected to the network.
+experiment independently with variations on the software.
 
 Despite the initial steep learning curve to learn commonly used Git commands,
 Git provides a superior, welcoming collaboration platform for the community. It
@@ -286,7 +286,7 @@ article to reviewers and communicate author replies. However, the technical
 nature of code solicits greater technical capabilities of the tools and
 methods used to evaluate its reproducibility.
 
-While this problem is multi-faceted, some progress has been made through ITK’s
+While this problem is multi-faceted, some progress has been made through ITK$’$s
 adoption of the Gerrit Code Review system.  Gerrit is an open source project
 maintained by the Google Android mobile phone project. This system enables a
 large community of developers to inspect and comment on the code changes that
@@ -309,7 +309,7 @@ patch can be shared with the community by pushing the topic branch to the
 Gerrit server \cite{ITKGerrit}.  Once in the server, the change is publicly
 accessible via the web-based front end.  Developers can then use a web-browser
 to see side-by-side differences that are easily identified with
-color-highlighting, on a file-based diff page.
+color-highlighting on a file-based diff page.
 
 From the web interface, contributors can request the attention of specific
 reviewers to comment on their patch. As a convenience, the web-interface
@@ -531,7 +531,7 @@ regular online videoconference meetings.
 
 The life cycle of a code change starts in the communication channels when
 community members raise issues in the code. These issues might relate to lack
-of correctness, or lack of desirable features, run-time performance
+of correctness, lack of desirable features, run-time performance
 bottlenecks, lack of support for specific platforms, or problems with specific
 types of data. Typically, the issues are discussed among community members
 until it is determined that changes in the code are required, and that one or
@@ -569,34 +569,36 @@ system, << d['src/gerrit_results.json'].from_json()['changes'] >> changes have
 been submitted to the Gerrit review server and
 << d['src/gerrit_results.json'].from_json()['reviews'] >> reviews were performed.
 As a matter of policy, all merged changes should have at least one review,
-but the number of iterations on a change varies flexibly depending on the
-requirements. This results in a roughly negative exponential distribution in
+but the number of iterations on a change varies flexibly.
+This results in a roughly negative exponential distribution in
 revisions, as evident in the histogram of revisions in
 Figure 4.  The highest number of reviews
 for a single change was
 << d['src/gerrit_results.json'].from_json()['max_reviews'] >>.
 
 Two direct but notable conclusions follow from this data. First, at least one
-other person examined and reproduced a proposed code.  This certainly exceeds
-the publication systems where code is never disseminated. And it likely exceeds
+other person examined and reproduced a proposed change.  This certainly exceeds
+the publication systems where code is never disseminated. And, it likely exceeds
 validation systems where the code is published, but there are not incentives or
 checks that reviewers looked at or applied the code.  Secondly, the number of
 Patch Sets greater than one also indicates that improvements were made and
-errors were identified during this process.
+errors were identified during this process; coding errors are common even in
+the context of a scientific software project with experienced developers and
+quality control systems that far exceed those applied by the typical research
+scientist.
 
 \textbf{Figure 5. }{Fix-up commit percentage before and after peer code review.}
 \label{fig:05}
 
 This hypothesis is further supported by Figure 5, in which the number of
 ``fix-up'' changes are quantified. A fix-up change is defined in an objective
-way that roughly captures changes that intended to fix the bugs or improve the
-features that were introduced in the previous Patch Set.  Sections of a patch,
-traditionally called hunks, that are additions or modification are identified,
-and all commits in the following five days are examined.  If content in the
-committed hunk is modified in that period, it is labeled as a fix-up commit.
-If addition or modification hunks in the fix-up commit are again modified in
-the following five days, then the original change is said to have two fix-up
-commits, and so on.
+way that roughly captures changes intended to fix bugs introduced in the
+previous Patch Set.  Sections of a patch, traditionally called hunks, which are
+additions or modifications, are identified, and all commits in the following
+five days are examined.  If content in the committed hunk is modified in that
+period, it is labeled as a fix-up commit.  If addition or modification hunks
+in the fix-up commit are again modified in the following five days, then the
+original change is said to have two fix-up commits, and so on.
 
 We computed fix-up commits in the ITK repository for a three year period
 preceding the adoption of the peer code review system from August 25th, 2007
@@ -611,7 +613,7 @@ single fix-up commits from <<
 d['src/fix_up_bins.json'].from_json()['single_pre'] >>\%
 to << d['src/fix_up_bins.json'].from_json()['single_post'] >>\% and
 dramatically reduces the percent fix-up commits by approximately half for
-higher numbers.
+higher numbers of fix-up commits.
 
 \textbf{Figure 6. } {Peer code reviews graph.  Nodes are individual community
 members and size of the circle at the node is related logarithmically to the
@@ -625,26 +627,27 @@ in different colors.}\label{fig:07}
 
 The underlying cause of this apparent reduction in errors is suggested by the
 graph visualization of Figure 6. This graph represents the three years of
-reviews performed by the ITK community. Each node in this graph representation
-of the code reviewers' network is a community member, and the size of the node is
-logarithmically related to the accumulated number of changes created by that
-community member.  The edges in the directed graph represent accumulated
-reviews given by one community to another. A number of high level observations
-can be made from this graph.  There is a spectrum of node sizes and
-connectivities that correspond to varying degrees of collaborations. While there
-are some node pairs that have mutually strong connections, the reviews are
-generally well distributed.  Cohesiveness of the community is evident by the
-well-connected property of the graph and the closeness of all nodes.  This is
-further quantified in Figure 7.  Here an undirected version of the graph is
-used to compute the closeness centrality of each node against the logarithm of
-changes created.  Closeness centrality is defined as \cite{Freeman1979}
+reviews performed by the ITK community. Each node is a community member, and
+the size of the node is logarithmically related to the accumulated number of
+changes created by that community member.  The edges in the directed graph
+represent accumulated reviews given by one community to another.
+
+A number of high level observations can be made from this graph.  There is a
+spectrum of node sizes and connectivities that correspond to varying degrees
+of collaborations. While there are some node pairs that have mutually strong
+connections, the reviews are generally well distributed.  Cohesiveness of the
+community is evident by the well-connected property of the graph and the
+closeness of all nodes.  This is further quantified in Figure 7.  Here an
+undirected version of the graph is used to compute the closeness centrality of
+each node against the logarithm of changes created.  Closeness centrality is
+defined as, \cite{Freeman1979}
 
 \begin{equation}
    C(u) = \frac{n - 1}{\sum_{v=1}^{n-1} d(v, u)},
 \end{equation}
 
 where $d(v, u)$ the shortest path distance from node $u$ to node $v$, and it
-is normalized by $n-1$ nodes in the graph. This quantifies the reciprocal of th-
+is normalized by $n-1$ nodes in the graph. This quantifies the reciprocal of the
 average distance between nodes; i.e., how close the nodes are from each other
 or how long it will take to spread information from one node to all other
 nodes sequentially \cite{Newman2005}. Overall, this measure of communication is
@@ -671,11 +674,11 @@ the articles and over 1,790,000 views.
 \textbf{Figure 8. }{Insight Journal submissions and reviews over the journal's
 lifespan since 2005.} \label{fig:08}
 
-Figure 8 displays the progression of submissions and reviews of articles in the
-Insight Journal since its inception in 2005.  There has generally been a linear
-increase in submissions and reviews since 2005 with the rate of submissions
-tapering off since 2010.  The number of reviews is proportional but
-considerably less than the number of submissions.
+Figure 8 displays the progression of submissions and reviews of articles in
+the Insight Journal since its inception in 2005.  There has generally been a
+linear increase in submissions and reviews since 2005 with the rate of
+submissions tapering off since 2010.  The number of reviews is approximately
+double than the number of submissions.
 
 
 
@@ -730,12 +733,12 @@ concrete solution to address a tangential problem at hand. Indeed, algorithms
 and solutions published in many academic journals are heralded for their
 ability to address important problems, but solutions often never see
 translation into pragmatic application because they are irreproducible and
-false or because they lack an easy to apply incarnation in quality, clean code.
+false or because they lack an easy to apply manifestation in quality, clean code.
 
 The age of the journal has revealed a practical challenge in source code
 submitted with articles. Since software is a constantly evolving creature that
 must be nurtured and maintained, older articles will more often than not fail
-to build or run even if they passed their initial quality assurance testing.
+to build or run, even if they passed their initial quality assurance testing.
 This can not be avoided as computer architectures progress, operating systems
 upgrade, and libraries mature. A recent flourishing of technologies such as
 operating system virtual machines and easy-to-apply container systems may help
@@ -750,7 +753,7 @@ slow to acknowledge the Insight Journal as one of the traditional journals
 that drives the academic "publish or perish" career economy, the primary
 incentive to submit to the journal is impact on a vibrant research community.
 Consequently, visible activity on the mailing lists and the adoption of published
-articles into the Toolkit drove submission rates prior to 2010. Therefore, to
+articles into the toolkit drove submission rates prior to 2010. Therefore, to
 drive activity upwards, efforts must be put forth to increase community
 vibrancy, give credence to the value of publications in the Insight Journal
 relative to traditional peer-reviewed journals, and promote and embrace more
@@ -758,17 +761,17 @@ just alternative incentive mechanisms for funding and career advancement.
 
 It is also notable that the number of reviews is low relative to the number of
 submissions. Again, incentive mechanisms should improve to reward reviews.  It
-is notable that the journal has also had a non-blinded open review policy where
+is notable that the journal has also had a non-blinded, open review policy where
 the names of reviewers are made public. While this increases accountability and
 transparency, it is known to discourage review activity
 \cite{Rooyen1999,Walsh2000}. While many outstanding articles have been
 submitted to the toolkit, relatively few have been merged into the toolkit.
-The reflects the amount of effort required to reproduce another$'$s work during
+This reflects the amount of effort required to reproduce another$'$s work during
 review.  To address this significant challenge, two approaches have been taken.
 First, the standard, pluggable modular system (Section 2.2.2), greatly lowers
-integration barriers.  Second, authors are self-enabled with technologies such
-as Gerrit to directly respond to reproducibility barriers discovered during
-review. However, there is no complete transient solution to this problem; the
+integration barriers.  Second, authors are self-enabled, with technologies such
+as Gerrit, to directly respond to reproducibility barriers discovered during
+review. However, there is no complete, transient solution to this problem; the
 scientific community must recognize that reproducible science requires time,
 effort, and resources.
 
@@ -796,7 +799,7 @@ article.  The data, code, and sources to build this article can be found at
 \paragraph{Funding\textcolon} The US National Institutes of Health National
 Library of Medicine (NIH-NLM) has been a primary funder of the Insight Toolkit since
 its inception 14 years and currently supports the work of authors Ibanez, Liu,
-and McCormick. Most recently support is through the Department of Health and Human
+and McCormick. Most recently, support is through the Department of Health and Human
 Services award number HHSN276201000490P as part of the American Recovery and
 Reinvestment Act of 2009 and "ITK Help Desk and Information Technology Support
 of the NLM's Insight Toolkit (ITK-v4)" contract number HHSN276201300003I.
