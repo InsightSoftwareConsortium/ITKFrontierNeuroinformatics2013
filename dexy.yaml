@@ -15,6 +15,8 @@ figures:
     - src/git-contributors-histogram.py|py:
       - py: { scriptargs: '../data/itk_git_contributors.dat ../doc/itk_git_contributors.eps', add-new-files: True, output-extensions: ['.eps']}
       - data/itk_git_contributors.dat
+    - src/fetch-images.py|py:
+      - py: { add-new-files: True, output-extensions: ['.mha'], require-output: True }
 
 doc/frontiers.tex|jinja|latex:
     - .cls
@@ -27,6 +29,7 @@ doc/frontiers.tex|jinja|latex:
     - .eps
     - .png
     - .json
+    - .mha
     - _*.tex:
         - output: False
     - figures
