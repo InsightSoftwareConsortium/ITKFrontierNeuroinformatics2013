@@ -1,3 +1,14 @@
+example:
+    - src/example/run.sh|sh:
+      - src/fetch-images.py|py:
+        - py: { add-new-files: True, output-extensions: ['.mha'], require-output: True }
+      - src/example/build.sh|sh:
+        - sh: { add-new-files: ['Registration'] }
+        - src/example/CMakeLists.txt
+        - .cxx
+      - src/example/build/Registration
+      - .mha
+
 figures:
     - src/gerrit-graph.py|py:
       - py: { scriptargs: '../data/gerrit_data.json ../doc/gerrit_graph.pdf ../data/GerritGraph.json ../doc/gerrit_closeness.eps', add-new-files: True, output-extensions: ['.eps']}
@@ -15,8 +26,7 @@ figures:
     - src/git-contributors-histogram.py|py:
       - py: { scriptargs: '../data/itk_git_contributors.dat ../doc/itk_git_contributors.eps', add-new-files: True, output-extensions: ['.eps']}
       - data/itk_git_contributors.dat
-    - src/fetch-images.py|py:
-      - py: { add-new-files: True, output-extensions: ['.mha'], require-output: True }
+    - example
 
 doc/frontiers.tex|jinja|latex:
     - .cls
@@ -29,7 +39,6 @@ doc/frontiers.tex|jinja|latex:
     - .eps
     - .png
     - .json
-    - .mha
     - _*.tex:
         - output: False
     - figures
@@ -38,5 +47,5 @@ doc/frontiers.tex|jinja|latex:
       - py: { 'add-new-files': True }
     - src/gerrit-median-centrality.py|py:
       - data/gerrit_data.json
-      - py: { scriptargs: '../data/gerrit_data.json' } 
+      - py: { scriptargs: '../data/gerrit_data.json' }
       - src/gerrit-graph.py
