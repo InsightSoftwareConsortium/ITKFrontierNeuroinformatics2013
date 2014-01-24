@@ -1,13 +1,13 @@
 example:
     - src/example/run.sh|sh:
       - src/fetch-images.py|py:
-        - py: { add-new-files: True, output-extensions: ['.mha'], require-output: True }
+        - py: { add-new-files: True, output-extensions: ['.zip'], require-output: True }
       - src/example/build.sh|sh:
         - sh: { add-new-files: ['Registration'] }
         - src/example/CMakeLists.txt
         - .cxx
       - src/example/build/Registration
-      - .mha
+      - .zip
 
 figures:
     - src/gerrit-graph.py|py:
