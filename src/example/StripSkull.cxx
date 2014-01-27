@@ -16,6 +16,8 @@
  *
  *=========================================================================*/
 
+#include "itkBinaryDilateImageFilter.h"
+#include "itkFlatStructuringElement.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkMaskImageFilter.h"
@@ -77,15 +79,28 @@ int main( int argc, char * argv[] )
   stripTsFilter->SetAtlasImage( atlasReader->GetOutput() );
   stripTsFilter->SetAtlasBrainMask( atlasMaskReader->GetOutput() );
 
+  typedef itk::FlatStructuringElement< Dimension > StructuringElementType;
+
+  typedef itk::BinaryDilateImageFilter< AtlasMaskImageType, AtlasMaskImageType, StructuringElementType > DilateFilterType;
+  DilateFilterType::Pointer dilateFilter = DilateFilterType::New();
+  dilateFilter->SetInput( stripTsFilter->GetOutput() );
+  dilateFilter->SetDilateValue( 1 );
+  StructuringElementType::RadiusType bigRadius;
+  bigRadius.Fill( 6 );
+  StructuringElementType bigDilateStructuringElement = StructuringElementType::Ball( bigRadius );
+  dilateFilter->SetKernel( bigDilateStructuringElement );
+
+  AtlasMaskImageType::Pointer patientMask = dilateFilter->GetOutput();
+
   typedef itk::MaskImageFilter< PatientImageType, AtlasMaskImageType, PatientImageType > PatientMaskFilterType;
   PatientMaskFilterType::Pointer patientMaskFilter = PatientMaskFilterType::New();
   patientMaskFilter->SetInput1( patientReader->GetOutput() );
-  patientMaskFilter->SetInput2( stripTsFilter->GetOutput() );
+  patientMaskFilter->SetInput2( patientMask );
 
   typedef itk::ImageFileWriter< AtlasMaskImageType > MaskWriterType;
   MaskWriterType::Pointer maskWriter = MaskWriterType::New();
   maskWriter->SetFileName( outputMaskFilename );
-  maskWriter->SetInput( stripTsFilter->GetOutput() );
+  maskWriter->SetInput( patientMask );
 
   typedef itk::ImageFileWriter< PatientImageType > MaskedPatientWriterType;
   MaskedPatientWriterType::Pointer maskedPatientWriter = MaskedPatientWriterType::New();
