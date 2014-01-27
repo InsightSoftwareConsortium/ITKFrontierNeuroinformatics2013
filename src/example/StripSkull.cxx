@@ -17,6 +17,9 @@
  *=========================================================================*/
 
 #include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
+
+#include "itkStripTsImageFilter.h"
 
 int main( int argc, char * argv[] )
 {
@@ -57,6 +60,22 @@ int main( int argc, char * argv[] )
     patientReader->Update();
     atlasReader->Update();
     atlasMaskReader->Update();
+    }
+  catch( itk::ExceptionObject & error )
+    {
+    std::cerr << "Error: " << error << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  typedef itk::StripTsImageFilter< PatientImageType, AtlasImageType, AtlasMaskImageType > StripTsFilterType;
+  StripTsFilterType::Pointer stripTsFilter = StripTsFilterType::New();
+  stripTsFilter->SetInput( patientReader->GetOutput() );
+  stripTsFilter->SetAtlasImage( atlasReader->GetOutput() );
+  stripTsFilter->SetAtlasBrainMask( atlasMaskReader->GetOutput() );
+
+  try
+    {
+    stripTsFilter->Update();
     }
   catch( itk::ExceptionObject & error )
     {
