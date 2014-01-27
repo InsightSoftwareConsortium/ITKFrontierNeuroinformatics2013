@@ -7,7 +7,7 @@ import os
 
 urls = ['http://packages.bic.mni.mcgill.ca/mni-models/colin27/mni_colin27_1998_minc2.zip',
     'https://github.com/cactuxx/skullStrip/raw/master/test/Input/atlasImage.mha',
-    'https://github.com/cactuxx/skullStrip/blob/master/test/Input/atlasMask.mha']
+    'https://github.com/cactuxx/skullStrip/raw/master/test/Input/atlasMask.mha']
 
 print('fetching data')
 output_dir = os.path.join('..', 'data')
