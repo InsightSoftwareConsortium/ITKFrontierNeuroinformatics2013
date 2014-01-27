@@ -9,6 +9,7 @@ example:
       - src/example/build/StripSkull
       - .zip
       - .mha
+      - sh: { add-new-files: True, output-extensions: ['.mha'], require-output: True }
 
 figures:
     - src/gerrit-graph.py|py:

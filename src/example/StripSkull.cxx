@@ -18,22 +18,26 @@
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include "itkMaskImageFilter.h"
 
 #include "itkStripTsImageFilter.h"
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 3 )
+  if( argc < 6 )
     {
     std::cerr << "Usage: "
               << argv[0]
               << " patientImageFile atlasImageFile atlasMaskFile"
+              << " outputMaskFile outputPatientMaskFile"
               << std::endl;
     return EXIT_FAILURE;
     }
   const char * patientImageFilename = argv[1];
   const char * atlasImageFilename = argv[2];
   const char * atlasMaskFilename = argv[3];
+  const char * outputMaskFilename = argv[4];
+  const char * outputPatientMaskFile = argv[5];
 
   const unsigned int Dimension = 3;
   typedef float                                       PixelType;
@@ -73,9 +77,24 @@ int main( int argc, char * argv[] )
   stripTsFilter->SetAtlasImage( atlasReader->GetOutput() );
   stripTsFilter->SetAtlasBrainMask( atlasMaskReader->GetOutput() );
 
+  typedef itk::MaskImageFilter< PatientImageType, AtlasMaskImageType, PatientImageType > PatientMaskFilterType;
+  PatientMaskFilterType::Pointer patientMaskFilter = PatientMaskFilterType::New();
+  patientMaskFilter->SetInput1( patientReader->GetOutput() );
+  patientMaskFilter->SetInput2( stripTsFilter->GetOutput() );
+
+  typedef itk::ImageFileWriter< AtlasMaskImageType > MaskWriterType;
+  MaskWriterType::Pointer maskWriter = MaskWriterType::New();
+  maskWriter->SetFileName( outputMaskFilename );
+  maskWriter->SetInput( stripTsFilter->GetOutput() );
+
+  typedef itk::ImageFileWriter< PatientImageType > MaskedPatientWriterType;
+  MaskedPatientWriterType::Pointer maskedPatientWriter = MaskedPatientWriterType::New();
+  maskedPatientWriter->SetFileName( outputPatientMaskFile );
+  maskedPatientWriter->SetInput( patientMaskFilter->GetOutput() );
   try
     {
-    stripTsFilter->Update();
+    maskWriter->Update();
+    maskedPatientWriter->Update();
     }
   catch( itk::ExceptionObject & error )
     {
