@@ -1,11 +1,22 @@
-#include "itkImageFileReader.h"
-#include "itkExtractImageFilter.h"
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 
-template< typename TImage >
-void
-Register( TImage * fixed, TImage * moving )
-{
-}
+#include "itkImageFileReader.h"
 
 int main( int argc, char * argv[] )
 {
@@ -13,86 +24,44 @@ int main( int argc, char * argv[] )
     {
     std::cerr << "Usage: "
               << argv[0]
-              << " fixedImage movingImage [--slice-only]"
+              << " patientImageFile atlasImageFile atlasMaskFile"
               << std::endl;
     return EXIT_FAILURE;
     }
-  const char * fixedImageFile = argv[1];
-  const char * movingImageFile = argv[2];
-  bool sliceOnly = true; // TODO: false
-  if( argc > 3 )
+  const char * patientImageFilename = argv[1];
+  const char * atlasImageFilename = argv[2];
+  const char * atlasMaskFilename = argv[3];
+
+  const unsigned int Dimension = 3;
+  typedef float                                       PixelType;
+  typedef itk::Image< PixelType, Dimension >          PatientImageType;
+  typedef short                                       AtlasPixelType;
+  typedef itk::Image< AtlasPixelType, Dimension >     AtlasImageType;
+  typedef unsigned char                               AtlasMaskPixelType;
+  typedef itk::Image< AtlasMaskPixelType, Dimension > AtlasMaskImageType;
+
+  typedef itk::ImageFileReader< PatientImageType > PatientReaderType;
+  PatientReaderType::Pointer patientReader = PatientReaderType::New();
+  patientReader->SetFileName( patientImageFilename );
+
+  typedef itk::ImageFileReader< AtlasImageType > AtlasReaderType;
+  AtlasReaderType::Pointer atlasReader = AtlasReaderType::New();
+  atlasReader->SetFileName( atlasImageFilename );
+
+  typedef itk::ImageFileReader< AtlasMaskImageType > AtlasMaskReaderType;
+  AtlasMaskReaderType::Pointer atlasMaskReader = AtlasMaskReaderType::New();
+  atlasMaskReader->SetFileName( atlasMaskFilename );
+
+  try
     {
-    sliceOnly = true;
+    patientReader->Update();
+    atlasReader->Update();
+    atlasMaskReader->Update();
     }
-
-  typedef float PixelType;
-
-  if( sliceOnly )
+  catch( itk::ExceptionObject & error )
     {
-    const unsigned int Dimension = 2;
-    typedef itk::Image< PixelType, Dimension > ImageType;
-    typedef itk::Image< PixelType, 3 >         VolumeImageType;
-
-    typedef itk::ImageFileReader< VolumeImageType > ReaderType;
-    ReaderType::Pointer fixedReader = ReaderType::New();
-    fixedReader->SetFileName( fixedImageFile );
-    VolumeImageType::Pointer fixedImage = fixedReader->GetOutput();
-    ReaderType::Pointer movingReader = ReaderType::New();
-    movingReader->SetFileName( movingImageFile );
-    VolumeImageType::Pointer movingImage = movingReader->GetOutput();
-
-    typedef itk::ExtractImageFilter< VolumeImageType, ImageType > ExtractFilterType;
-    ExtractFilterType::Pointer fixedExtractor = ExtractFilterType::New();
-    fixedExtractor->SetDirectionCollapseToIdentity();
-    fixedExtractor->SetInput( fixedImage );
-    ExtractFilterType::Pointer movingExtractor = ExtractFilterType::New();
-    movingExtractor->SetDirectionCollapseToIdentity();
-    movingExtractor->SetInput( movingImage );
-
-    try
-      {
-      fixedReader->UpdateOutputInformation();
-      movingReader->UpdateOutputInformation();
-
-      typedef VolumeImageType::RegionType RegionType;
-      typedef VolumeImageType::SizeType   SizeType;
-      typedef VolumeImageType::IndexType  IndexType;
-
-      RegionType fixedExtractionRegion = fixedImage->GetLargestPossibleRegion();
-      SizeType fixedSize = fixedExtractionRegion.GetSize();
-      IndexType fixedIndex = fixedExtractionRegion.GetIndex();
-      fixedIndex[2] = fixedIndex[2] + fixedSize[2] / 2;
-      fixedSize[2] = 0;
-      fixedExtractionRegion.SetIndex( fixedIndex );
-      fixedExtractionRegion.SetSize( fixedSize );
-
-      RegionType movingExtractionRegion = movingImage->GetLargestPossibleRegion();
-      SizeType movingSize = movingExtractionRegion.GetSize();
-      IndexType movingIndex = movingExtractionRegion.GetIndex();
-      movingIndex[2] = movingIndex[2] + movingSize[2] / 2;
-      movingSize[2] = 0;
-      movingExtractionRegion.SetIndex( movingIndex );
-      movingExtractionRegion.SetSize( movingSize );
-
-      fixedExtractor->SetExtractionRegion( fixedExtractionRegion );
-      fixedExtractor->Update();
-
-      movingExtractor->SetExtractionRegion( movingExtractionRegion );
-      movingExtractor->Update();
-
-      Register< ImageType >( fixedExtractor->GetOutput(), movingExtractor->GetOutput() );
-
-      }
-    catch( itk::ExceptionObject & error )
-      {
-      std::cerr << "Error: " << error << std::endl;
-      return EXIT_FAILURE;
-      }
-    }
-  else
-    {
-    const unsigned int Dimension = 2;
-    //Register< ImageType >( fixed, moving );
+    std::cerr << "Error: " << error << std::endl;
+    return EXIT_FAILURE;
     }
 
   return EXIT_SUCCESS;

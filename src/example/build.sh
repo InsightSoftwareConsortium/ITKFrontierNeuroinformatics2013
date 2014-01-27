@@ -2,5 +2,5 @@
 
 mkdir -p build
 cd build
-cmake -DITK_DIR:PATH=~/bin/ITK ..
-make -j6
+cmake -DCMAKE_BUILD_TYPE:STRING=Release -DITK_DIR:PATH=~/bin/ITK ..
+make

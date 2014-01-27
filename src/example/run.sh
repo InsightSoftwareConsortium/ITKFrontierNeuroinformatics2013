@@ -1,10 +1,12 @@
 #!/bin/sh
 
-cd ../../data
-unzip mni_colin27_1998_minc2.zip
-cd -
+set -x
+pushd ../../data
+unzip -qq mni_colin27_1998_minc2.zip
+popd
 
-#fixed_image=../../data/Sim_074_T2.mha
-#moving_image=../../data/Sim_094_T2.mha
-#chmod +x ./build/Registration
-#./build/Registration $fixed_image $moving_image
+patient_image=../../data/colin27_t1_tal_lin.mnc
+atlas_image=../../data/atlasImage.mha
+atlas_mask_image=../../data/atlasMask.mha
+chmod +x ./build/StripSkull
+./build/StripSkull $patient_image $atlas_image $atlas_mask_image

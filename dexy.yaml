@@ -3,10 +3,10 @@ example:
       - src/fetch-images.py|py:
         - py: { add-new-files: True, output-extensions: ['.zip', '.mha'], require-output: True }
       - src/example/build.sh|sh:
-        - sh: { add-new-files: ['Registration'] }
+        - sh: { add-new-files: ['StripSkull'] }
         - src/example/CMakeLists.txt
         - .cxx
-      - src/example/build/Registration
+      - src/example/build/StripSkull
       - .zip
       - .mha
 
