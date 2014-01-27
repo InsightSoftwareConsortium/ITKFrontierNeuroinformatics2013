@@ -5,15 +5,18 @@
 import urllib2
 import os
 
-url = 'http://packages.bic.mni.mcgill.ca/mni-models/colin27/mni_colin27_1998_minc2.zip'
+urls = ['http://packages.bic.mni.mcgill.ca/mni-models/colin27/mni_colin27_1998_minc2.zip',
+    'https://github.com/cactuxx/skullStrip/raw/master/test/Input/atlasImage.mha',
+    'https://github.com/cactuxx/skullStrip/blob/master/test/Input/atlasMask.mha']
 
 print('fetching data')
 output_dir = os.path.join('..', 'data')
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
-response = urllib2.urlopen(url)
-data = response.read()
-filename = os.path.join(output_dir, url.split('/')[-1])
-print('writing ' + filename)
-with open(filename, 'wb') as fp:
-    fp.write(data)
+for url in urls:
+    response = urllib2.urlopen(url)
+    data = response.read()
+    filename = os.path.join(output_dir, url.split('/')[-1])
+    print('writing ' + filename)
+    with open(filename, 'wb') as fp:
+        fp.write(data)
