@@ -21,6 +21,7 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkMaskImageFilter.h"
+#include "itkThresholdImageFilter.h"
 
 #include "itkStripTsImageFilter.h"
 
@@ -90,9 +91,20 @@ int main( int argc, char * argv[] )
   StructuringElementType bigDilateStructuringElement = StructuringElementType::Ball( bigRadius );
   dilateFilter->SetKernel( bigDilateStructuringElement );
 
-  AtlasMaskImageType::Pointer patientMask = dilateFilter->GetOutput();
-
   typedef itk::MaskImageFilter< PatientImageType, AtlasMaskImageType, PatientImageType > PatientMaskFilterType;
+  PatientMaskFilterType::Pointer oversegmentMaskedFilter = PatientMaskFilterType::New();
+  oversegmentMaskedFilter->SetInput1( patientReader->GetOutput() );
+  oversegmentMaskedFilter->SetInput2( dilateFilter->GetOutput() );
+
+  typedef itk::BinaryThresholdImageFilter< PatientImageType, AtlasMaskImageType > ThresholdFilterType;
+  ThresholdFilterType::Pointer thresholdFilter = ThresholdFilterType::New();
+  thresholdFilter->SetUpperThreshold( 3000000 );
+  thresholdFilter->SetInsideValue( 0 );
+  thresholdFilter->SetOutsideValue( 1 );
+  thresholdFilter->SetInput( oversegmentMaskedFilter->GetOutput() );
+
+  AtlasMaskImageType::Pointer patientMask = thresholdFilter->GetOutput();
+
   PatientMaskFilterType::Pointer patientMaskFilter = PatientMaskFilterType::New();
   patientMaskFilter->SetInput1( patientReader->GetOutput() );
   patientMaskFilter->SetInput2( patientMask );

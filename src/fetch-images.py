@@ -5,7 +5,7 @@
 import urllib2
 import os
 
-urls = ['http://packages.bic.mni.mcgill.ca/mni-models/colin27/mni_colin27_1998_minc2.zip',
+urls = ['http://packages.bic.mni.mcgill.ca/mni-models/colin27/mni_colin27_1998_nifti.zip',
     'https://github.com/cactuxx/skullStrip/raw/master/test/Input/atlasImage.mha',
     'https://github.com/cactuxx/skullStrip/raw/master/test/Input/atlasMask.mha']
 

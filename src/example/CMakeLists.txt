@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( Registration )
 
-find_package( ITK REQUIRED COMPONENTS SkullStrip ITKIOMINC )
+find_package( ITK REQUIRED COMPONENTS SkullStrip )
 include( ${ITK_USE_FILE} )
 
 add_executable( StripSkull StripSkull.cxx )

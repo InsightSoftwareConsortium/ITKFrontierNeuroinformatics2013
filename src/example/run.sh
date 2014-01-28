@@ -2,13 +2,13 @@
 
 set -x
 pushd ../../data
-unzip -qq mni_colin27_1998_minc2.zip
+unzip -qq mni_colin27_1998_nifti.zip
 popd
 
 input_id=colin27_t1_tal_lin
 
 # inputs
-patient_image=../../data/${input_id}.mnc
+patient_image=../../data/${input_id}.nii
 atlas_image=../../data/atlasImage.mha
 atlas_mask_image=../../data/atlasMask.mha
 
