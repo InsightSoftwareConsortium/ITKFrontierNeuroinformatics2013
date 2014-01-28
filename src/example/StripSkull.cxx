@@ -111,7 +111,15 @@ int main( int argc, char * argv[] )
   reconstructionFilter->SetForegroundValue( 1 );
   reconstructionFilter->SetInput( thresholdFilter->GetOutput() );
 
-  AtlasMaskImageType::Pointer patientMask = reconstructionFilter->GetOutput();
+  DilateFilterType::Pointer smallDilateFilter = DilateFilterType::New();
+  smallDilateFilter->SetDilateValue( 1 );
+  StructuringElementType::RadiusType smallRadius;
+  smallRadius.Fill( 2 );
+  StructuringElementType smallDilateStructuringElement = StructuringElementType::Ball( smallRadius );
+  smallDilateFilter->SetKernel( smallDilateStructuringElement );
+  smallDilateFilter->SetInput( reconstructionFilter->GetOutput() );
+
+  AtlasMaskImageType::Pointer patientMask = smallDilateFilter->GetOutput();
 
   PatientMaskFilterType::Pointer patientMaskFilter = PatientMaskFilterType::New();
   patientMaskFilter->SetInput1( patientReader->GetOutput() );
