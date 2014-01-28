@@ -17,6 +17,7 @@
  *=========================================================================*/
 
 #include "itkBinaryDilateImageFilter.h"
+#include "itkBinaryOpeningByReconstructionImageFilter.h"
 #include "itkFlatStructuringElement.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -103,7 +104,14 @@ int main( int argc, char * argv[] )
   thresholdFilter->SetOutsideValue( 1 );
   thresholdFilter->SetInput( oversegmentMaskedFilter->GetOutput() );
 
-  AtlasMaskImageType::Pointer patientMask = thresholdFilter->GetOutput();
+  typedef itk::BinaryOpeningByReconstructionImageFilter< AtlasMaskImageType, StructuringElementType > ReconstructionFilterType;
+  ReconstructionFilterType::Pointer reconstructionFilter = ReconstructionFilterType::New();
+  reconstructionFilter->SetRadius( 10 );
+  reconstructionFilter->SetBackgroundValue( 0 );
+  reconstructionFilter->SetForegroundValue( 1 );
+  reconstructionFilter->SetInput( thresholdFilter->GetOutput() );
+
+  AtlasMaskImageType::Pointer patientMask = reconstructionFilter->GetOutput();
 
   PatientMaskFilterType::Pointer patientMaskFilter = PatientMaskFilterType::New();
   patientMaskFilter->SetInput1( patientReader->GetOutput() );
