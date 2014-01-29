@@ -25,4 +25,5 @@ $cpconvert $doc/gerrit_fix_ups.eps $out/figure_5_gerrit_fix_ups.$epstiff
 convert -resize ${width}x $doc/GerritGraphRender.png $out/figure_6_gerrit_graph_render.tiff
 $cpconvert $doc/gerrit_closeness.eps $out/figure_7_gerrit_closeness.$epstiff
 $cpconvert $doc/insight_journal_submissions.eps $out/figure_8_insight_journal_submissions.$epstiff
-
+let w=$width/3
+montage -compress lzw -geometry $wx$w $doc/colin_axial.png $doc/colin_sagittal.png $doc/colin_coronal.png $doc/atlas_axial.png $doc/atlas_sagittal.png $doc/atlas_coronal.png $doc/mask_axial.png $doc/mask_sagittal.png $doc/mask_coronal.png $out/figure_9_skull_strip_inputs.tiff

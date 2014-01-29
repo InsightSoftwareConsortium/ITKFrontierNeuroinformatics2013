@@ -675,10 +675,41 @@ double than the number of submissions.
 \subsection{Illustrative Analysis}
 
 In this section, an analysis pipeline is presented to highlight some of the
-capabilities of the toolkit. An automated quantification of a brain tumor's
-volume change is demonstrated on model datasets that are publically available
-under a Creative-Commons Attribution (CC-BY) license
-\cite{Prastawa2009,Niethammer2011}.
+capabilities of the toolkit. Segmentation of the brain from a magnetic
+resonance image (MRI) of the head is presented on open data and the source
+code included with the publication. An extension of the skull-stripping
+algorithm published by Bauter et al. \cite{Bauer2013,Bauer2011} available in
+the toolkit is applied to the Colin 27 stereotaxic 1998 brain model from the
+McConnell Brain Imaging Centre \cite{Holmes1998}.
+
+\textbf{Figure 9.}{Input datasets for the skull stripping segmentation task.
+Axial, sagittal, and coronal views of the input patient dataset (top row), the
+reference atlas (middle row), and the segmentation of the reference atlas
+(bottom row).}
+\label{fig:09}
+
+The format and type of 3D neural data for this analysis highlight the medical
+imaging-specific capabilities of ITK. Unlike photographic images that are
+uniformly 2D with isotropic pixel spacing, medical images are often two, three
+or more dimensions, have a variety of complex pixel types, like diffusion
+tensors, and have an offset from their origin, anisotropic spacing, and an
+off-axis orientation.  To address these challenges, computations in ITK are
+performed in physical space, which accounts for anisotropic spacing, etc, and
+are written in such a way that they apply to N-dimensional datasets.
+Arbitrary pixel types are supported, and a number of standard and medical
+imaging specific file formats for 2D, 3D, and ND datasets are supported,
+including BioRad, BMP, CSV, DICOM via the GDCM or DCMTK libraries, Analyze,
+HDF5, JPEG, LSM, MetaIO, MGH, MINC2, MRC, MGH, NIFTI, NRRD, PhilipsREC,
+PNG, Stimulate, TIFF, SCIFIO, and VTK.
+
+registration
+
+filtering
+
+segmentation
+
+writing / pipeline
+
 
 
 \section{Discussion}
