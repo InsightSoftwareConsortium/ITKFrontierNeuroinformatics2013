@@ -682,7 +682,7 @@ algorithm published by Bauter et al. \cite{Bauer2013,Bauer2011} available in
 the toolkit is applied to the Colin 27 stereotaxic 1998 brain model from the
 McConnell Brain Imaging Centre \cite{Holmes1998}.
 
-\textbf{Figure 9.}{Input datasets for the skull stripping segmentation task.
+\textbf{Figure 9. }{Input datasets for the skull stripping segmentation task.
 Axial, sagittal, and coronal views of the input patient dataset (top row), the
 reference atlas (middle row), and the segmentation of the reference atlas
 (bottom row).}
@@ -692,24 +692,47 @@ The format and type of 3D neural data for this analysis highlight the medical
 imaging-specific capabilities of ITK. Unlike photographic images that are
 uniformly 2D with isotropic pixel spacing, medical images are often two, three
 or more dimensions, have a variety of complex pixel types, like diffusion
-tensors, and have an offset from their origin, anisotropic spacing, and an
-off-axis orientation.  To address these challenges, computations in ITK are
-performed in physical space, which accounts for anisotropic spacing, etc, and
-are written in such a way that they apply to N-dimensional datasets.
-Arbitrary pixel types are supported, and a number of standard and medical
-imaging specific file formats for 2D, 3D, and ND datasets are supported,
-including BioRad, BMP, CSV, DICOM via the GDCM or DCMTK libraries, Analyze,
-HDF5, JPEG, LSM, MetaIO, MGH, MINC2, MRC, MGH, NIFTI, NRRD, PhilipsREC,
-PNG, Stimulate, TIFF, SCIFIO, and VTK.
+tensors, an offset from their origin, anisotropic spacing, and an off-axis
+orientation.  To address these challenges, computations in ITK are performed
+in physical space, which accounts for anisotropic spacing, etc, and are
+written in such a way that they apply to N-dimensional datasets.  Arbitrary
+pixel types are supported, and a number of standard and medical imaging
+specific file formats for 2D, 3D, and ND datasets are supported, including
+BioRad, BMP, CSV, DICOM via the GDCM or DCMTK libraries, Analyze, HDF5, JPEG,
+LSM, MetaIO, MGH, MINC2, MRC, MGH, NIFTI, NRRD, PhilipsREC, PNG, Stimulate,
+TIFF, SCIFIO, and VTK.
 
-registration
+The skull-stripping solution is initialized by registration of the target
+patient data set against an atlas that has a brain segmentation.  In this
+case, the publically available XIX atlas
+\cite{Hammers2003,Gousias2008,Bauer2013} is applied. A rigid registration
+followed by an affine registration is performed with a mutual information
+metric. In addition to integrated, specialized registration algorithm
+implementations, ITK has a modular registration framework where a choice of
+transform, optimization strategy, and metric can be paired from a variety of
+options. The image resampling process, which can be used independently from
+the registration framework, has a number of interpolation functions available
+such as nearest-neighbor, linear, b-spline, Gaussian, and windowed-sinc.
 
-filtering
+Following registration, the transformed atlas mask is used for initialization
+of the brain segmentation, which is refined with a level set segmentation.
+ITK contains full-featured level set segmentation implementations along with
+other segmentation algorithms and tools such as region growing algorithms and
+classes to evaluate the Dice and Jaccard overlap measures.
 
-segmentation
+The resulting segmentation is refined with mathematical morphology filtering
+algorithms. Segmentation and registration algorithms in ITK are complimented
+by a number of advanced edge detection, smoothing, convolution, deconvolution,
+mathematical morphology, bias correction, distance map, thresholding, and
+other filtering algorithms.  These filters can be chained into an analysis
+pipeline that will automatically re-execute all the effected filters when an input
+or parameter changes.  The output of the segmentation is illustrated in Figure
+10.
 
-writing / pipeline
-
+\textbf{Figure 10. }{Result of the brain segmentation of the head MRI from
+Figure 9. A surface rendering is displayed along with axial, sagittal, and
+coronal slices. These images were rendered with 3D Slicer \cite{Fedorov2012}.}
+\label{fig:10}
 
 
 \section{Discussion}
