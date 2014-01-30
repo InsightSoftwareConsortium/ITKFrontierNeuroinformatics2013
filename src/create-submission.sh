@@ -28,5 +28,5 @@ $cpconvert $doc/insight_journal_submissions.eps $out/figure_8_insight_journal_su
 let w=$width/3
 montage -compress lzw -geometry $wx$w $doc/colin_axial.png $doc/colin_sagittal.png $doc/colin_coronal.png $doc/atlas_axial.png $doc/atlas_sagittal.png $doc/atlas_coronal.png $doc/mask_axial.png $doc/mask_sagittal.png $doc/mask_coronal.png $out/figure_9_skull_strip_inputs.tiff
 montage -geometry $wx$w $doc/output_axial.png $doc/output_sagittal.png $doc/output_coronal.png /tmp/lower.png
-convert -compress lzw -resize ${width}x $doc/output_surface.png /tmp/lower.png $out/figure_10_skull_strip_outputs.tiff
+convert -compress lzw -resize ${width}x $doc/output_surface.png /tmp/lower.png -append $out/figure_10_skull_strip_outputs.tiff
 rm /tmp/lower.png
