@@ -4,7 +4,7 @@
 
 Example::
 
-    gerrit-stats.py -p 22 alice@review.source.kitware.com 'project:ITK limit:100'
+    gerrit-stats.py --port 22 alice@review.source.kitware.com 'project:ITK limit:100'
 
 Dependencies:
 
@@ -28,19 +28,28 @@ from matplotlib import pylab as plt
 def get_changes(host, port, query):
     """Download the changes from the Gerrit server and return the JSON data
     structure."""
-    ssh_call = ['ssh', '-p', str(port), host, 'gerrit', 'query',
-            '--format=JSON', '--all-approvals']
-    ssh_call.extend(query.split())
-    query_results = subprocess.check_output(ssh_call)
-    query_results = query_results.split('\n')
-    retrieval_stats = json.loads(query_results[-2])
-    print('Number of changes retrieved: ' + str(retrieval_stats['rowCount']))
-    print('Time for retrieval [msec]:   ' + str(retrieval_stats['runTimeMilliseconds']))
-    query_results = query_results[:-2]
-    query_results = ','.join(query_results)
-
     json_changes = '{"changes":['
-    json_changes += query_results
+    retrieved_changes = None
+    changes_to_skip = 0
+
+    while retrieved_changes is None or retrieved_changes == 500:
+        ssh_call = ['ssh', '-p', str(port), host, 'gerrit', 'query',
+                '--format=JSON', '--all-approvals',
+                '--start', str(changes_to_skip)]
+        ssh_call.extend(query.split())
+        query_results = subprocess.check_output(ssh_call)
+        query_results = query_results.split('\n')
+        retrieval_stats = json.loads(query_results[-2])
+        retrieved_changes = int(retrieval_stats['rowCount'])
+        changes_to_skip += retrieved_changes
+        print('Number of changes retrieved: ' + str(retrieval_stats['rowCount']))
+        print('Time for retrieval [msec]:   ' + str(retrieval_stats['runTimeMilliseconds']))
+        query_results = query_results[:-2]
+        query_results = ','.join(query_results)
+        json_changes += query_results
+        json_changes += ','
+
+    json_changes = json_changes[:-1]
     json_changes += ']}'
     json_changes = json.loads(json_changes)
     return json_changes
@@ -58,12 +67,13 @@ def reviewers_histogram(changes):
 
     histogram = {}
     for review in reviews:
-        name = review['name']
-        if histogram.has_key(name):
-            current_count = histogram[name][1]
-            histogram[name] = (review['email'], current_count+1)
-        else:
-            histogram[name] = (review['email'], 1)
+        if review.has_key('name') and review.has_key('email'):
+            name = review['name']
+            if histogram.has_key(name):
+                current_count = histogram[name][1]
+                histogram[name] = (review['email'], current_count+1)
+            else:
+                histogram[name] = (review['email'], 1)
 
     return histogram
 
